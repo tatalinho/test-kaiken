@@ -317,3 +317,4 @@ El desarrollo se realizó de forma iterativa, construyendo la solución paso a p
 ## 📧 Contacto
 
 Para más información sobre el proyecto, consulta el código fuente o los comentarios en el código.
+
