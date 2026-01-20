@@ -316,7 +316,7 @@ export default function Home() {
                     <XAxis dataKey="week" />
                     <YAxis />
                     <Tooltip
-                      formatter={(value: number) => formatNumber(value)}
+                      formatter={(value: number | undefined) => value !== undefined ? formatNumber(value) : ''}
                     />
                     <Legend />
                     <Bar dataKey="volume" fill="#3b82f6" name="Cantidad" />
@@ -335,7 +335,7 @@ export default function Home() {
                     <XAxis dataKey="week" />
                     <YAxis />
                     <Tooltip
-                      formatter={(value: number) => formatCurrency(value)}
+                      formatter={(value: number | undefined) => value !== undefined ? formatCurrency(value) : ''}
                     />
                     <Legend />
                     <Line
@@ -360,7 +360,7 @@ export default function Home() {
                     <XAxis dataKey="week" />
                     <YAxis />
                     <Tooltip
-                      formatter={(value: number) => formatCurrency(value)}
+                      formatter={(value: number | undefined) => value !== undefined ? formatCurrency(value) : ''}
                     />
                     <Legend />
                     <Line
