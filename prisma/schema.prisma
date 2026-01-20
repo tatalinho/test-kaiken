@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Tender {
+  id              String   @id
+  client          String
+  creationDate    DateTime @map("creation_date")
+  deliveryDate    DateTime? @map("delivery_date")
+  deliveryAddress String?  @map("delivery_address")
+  contactPhone    String?  @map("contact_phone")
+  contactEmail    String?  @map("contact_email")
+  margin          Float?
+  orders          Order[]
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("tenders")
+}
+
+model Product {
+  sku         String  @id
+  title       String
+  description String?
+  cost        Float
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  orders      Order[]
+
+  @@map("products")
+}
+
+model Order {
+  id          String   @id
+  tenderId    String   @map("tender_id")
+  productId   String   @map("product_id")
+  quantity    Int
+  price       Float
+  observation String?
+  tender      Tender   @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [sku], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
