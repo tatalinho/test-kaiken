@@ -2,18 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts'
+import dynamic from 'next/dynamic'
+
+// Importar gráficos dinámicamente para evitar problemas de SSR
+const VolumeChart = dynamic(() => import('../components/Charts').then(mod => ({ default: mod.VolumeChart })), { ssr: false })
+const RevenueChart = dynamic(() => import('../components/Charts').then(mod => ({ default: mod.RevenueChart })), { ssr: false })
+const MarginChart = dynamic(() => import('../components/Charts').then(mod => ({ default: mod.MarginChart })), { ssr: false })
 
 interface Stats {
   tenders: number
@@ -310,18 +304,7 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">
                   Volumen Vendido (Cantidad de Productos)
                 </h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="week" />
-                    <YAxis />
-                    <Tooltip
-                      formatter={(value: number | undefined) => value !== undefined ? formatNumber(value) : ''}
-                    />
-                    <Legend />
-                    <Bar dataKey="volume" fill="#3b82f6" name="Cantidad" />
-                  </BarChart>
-                </ResponsiveContainer>
+                <VolumeChart weeklyData={weeklyData} formatNumber={formatNumber} formatCurrency={formatCurrency} />
               </div>
 
               {/* Gráfico de Ingresos */}
@@ -329,24 +312,7 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">
                   Ingresos Semanales
                 </h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="week" />
-                    <YAxis />
-                    <Tooltip
-                      formatter={(value: number | undefined) => value !== undefined ? formatCurrency(value) : ''}
-                    />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="#10b981"
-                      strokeWidth={2}
-                      name="Ingresos"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <RevenueChart weeklyData={weeklyData} formatCurrency={formatCurrency} formatNumber={formatNumber} />
               </div>
 
               {/* Gráfico de Margen */}
@@ -354,24 +320,7 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">
                   Margen Semanal
                 </h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="week" />
-                    <YAxis />
-                    <Tooltip
-                      formatter={(value: number | undefined) => value !== undefined ? formatCurrency(value) : ''}
-                    />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="margin"
-                      stroke="#f59e0b"
-                      strokeWidth={2}
-                      name="Margen"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <MarginChart weeklyData={weeklyData} formatCurrency={formatCurrency} formatNumber={formatNumber} />
               </div>
 
               {/* Resumen de Totales */}
